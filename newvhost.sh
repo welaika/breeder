@@ -120,6 +120,7 @@ EOT
   exit 0
 }
 
+# Write the vhost standalone conf file
 function create_vhost() {
   local docroot=$2
   local site=$3
@@ -154,6 +155,7 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
+# Source .vhostrc or create it if not present
 hostrcfile="/home/${SUDO_USER}/.vhostrc"
 if [[ ! -f ${hostrcfile} ]]; then
   warning "Cannot find a .vhostrc file in your (${SUDO_USER}) home folder"
@@ -181,6 +183,7 @@ if [[ $# -eq 0 ]]; then
     usage
 fi
 
+# Grab arguments
 while getopts "s:da:i" opt; do
     case $opt in
         i) init_rc $hostrcfile ;;
@@ -198,6 +201,7 @@ folder=${localweb}/${site}
 vhostConf="${apacheconfpath}/${site}"
 
 
+# Project's folder creation
 if [[ ! -d ${folder} ]]; then
   info "'${folder}' does not exists, creating..." 
   mkdir ${folder}
@@ -213,10 +217,11 @@ else
   info "Folder '${folder}' already exists"
 fi
 
+# Chowning the project's folder
 chown ${SUDO_USER}:${web_group} $folder
 chmod 770 $folder
 
-
+# Creating vhost standalone conf file
 if [[ ! -f $vhostConf ]]; then
   info "Creating VHost file..."
   create_vhost $vhostConf ${localweb} ${site} ${logdir}
@@ -231,6 +236,7 @@ else
   info "VHost file already exists"
 fi
 
+# Adding the domain in /etc/hosts
 if [[ ! $(grep ${site} /etc/hosts) ]]; then
   info "Writing '${site}' in /etc/hosts"
   echo "127.0.0.1 $site" >> /etc/hosts
@@ -238,6 +244,7 @@ else
   info "'${site}' is already in the /etc/hosts file"
 fi
 
+# Creating DB
 if [[ $dbcreate ]]; then
   dbname=${db_prefix}$(basename ${site} ${firstleveldomain})
   info "Creting database '${dbname}'..."
@@ -255,6 +262,7 @@ if [[ $dbcreate ]]; then
   fi
 fi
 
+# Realoading apache
 info "Reloading Apache server..."
 ${apachecmd} reload 1>&2>&/dev/null
 if [[ $? == 0 ]]; then  
@@ -263,3 +271,4 @@ else
   error "Could't reload apache executing '${apachecmd}'"
 fi
 
+# Coding the project...it's your turn now
