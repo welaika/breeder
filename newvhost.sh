@@ -91,13 +91,8 @@ web_group="www-data"
 # Directory in which apache will save log files [ NO TRAILING SLASH ]
 logdir="/var/log"
 
-# For symlinking from your custom DocRoot to the Apache DocRoot configure
-# both the following options; esle just one of the two will be ok.
-#
 # The Apache document root
 docroot="/var/www"
-# Your custom document root
-localweb=""
 
 # The first level domain to be applied to all created vhosts
 # default; used if no other is passed through relative flag
@@ -186,20 +181,18 @@ if [[ $# -eq 0 ]]; then
     usage
 fi
 
-while getopts "s:lda:i" opt; do
+while getopts "s:da:i" opt; do
     case $opt in
         i) init_rc $hostrcfile ;;
         s) site=$OPTARG ;;
-        l) symlink=true ;;
         d) dbcreate=true ;;
         a) firstleveldomain=$OPTARG ;;
         *) usage ;;
     esac
 done
 
-if [[ ! $localweb ]]; then
-  localweb=${docroot}
-fi
+# Setup common variables
+localweb=${docroot}
 site=${site}${firstleveldomain}
 folder=${localweb}/${site}
 vhostConf="${apacheconfpath}/${site}"
@@ -237,12 +230,6 @@ if [[ ! -f $vhostConf ]]; then
 else
   info "VHost file already exists"
 fi
-
-
-if [[ $symlink ]]; then
-  ln -s ${localweb}/${site} ${docroot}
-fi
-
 
 if [[ ! $(grep ${site} /etc/hosts) ]]; then
   info "Writing '${site}' in /etc/hosts"
