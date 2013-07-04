@@ -1,14 +1,49 @@
 #!/bin/bash
-# Set a new vhost in lamp for Linux
-# .vhostrc is adaptable for LAMPP. Just add in your
+# Set a new vhost in LAMP for Linux for developing purpose
+# 
+# .vhostrc is adaptable for XAMPP/MAMPP. Just add in your
 # /opt/lampp/etc/httpd.conf a section like this:
 #
 # # Virtual hosts
-# Include etc/extra/httpd-vhosts.conf
+# Include etc/extra/httpd-vhosts.conf #Already present by deafult
 # Include etc/extra/sites-enabled/*
 #
 # and create such dir:
 # mkdir /opt/lampp/etc/extra/sites-enabled/
+# 
+# then configure your $HOME/.vhostrc accordingly
+# 
+# Nothing to configure here anyway. Enjoy
+
+
+##############################################################################
+
+# Text color variables
+txtred=$(tput setaf 1)  #Red
+txtgre=$(tput setaf 2)  # Green
+txtyel=$(tput setaf 3)  # Yellow
+txtblu=$(tput setaf 4)  # Blue
+txtbol=$(tput bold)     # Bold
+txtres=$(tput sgr0)     # Reset
+
+# Helper feedback functions
+function info() {
+  echo "${txtbol}    * ${1}${txtres}"
+}
+function success() {
+  echo "${txtbol}${txtgre}   ** ${1}${txtres}"
+}
+function warning() {
+  echo "${txtbol}${txtyel}  *** ${1}${txtres}"
+}
+function error() {
+  echo "${txtbol}${txtred} **** ${1}${txtres}"
+}
+function question() {
+  echo -n "${txtbol}${txtblu}    ? ${1}?${txtres} "
+}
+
+##############################################################################
 
 
 function usage {
@@ -33,15 +68,17 @@ fi
   cat >> $1 << EOT
 # Configuration file for newvhost script
 #
-# .vhostrc is adaptable for LAMPP. Just add in your
+# .vhostrc is adaptable for XAMPP/MAMPP. Just add in your
 # /opt/lampp/etc/httpd.conf a section like this:
 #
 # # Virtual hosts
-# Include etc/extra/httpd-vhosts.conf
+# Include etc/extra/httpd-vhosts.conf #Already present by deafult
 # Include etc/extra/sites-enabled/*
 #
 # and create such dir:
 # mkdir /opt/lampp/etc/extra/sites-enabled/
+# 
+# then configure your $HOME/.vhostrc accordingly
 
 # Example configuration is based upon a Apache2 installation on Ubuntu Oneiric
 
@@ -114,33 +151,6 @@ function create_vhost() {
 </VirtualHost>
 EOT
 }
-
-# Text color variables
-txtred=$(tput setaf 1)  #Red
-txtgre=$(tput setaf 2)  # Green
-txtyel=$(tput setaf 3)  # Yellow
-txtblu=$(tput setaf 4)  # Blue
-txtbol=$(tput bold)     # Bold
-txtres=$(tput sgr0)     # Reset
-
-# Helper feedback functions
-function info() {
-  echo "${txtbol}    * ${1}${txtres}"
-}
-function success() {
-  echo "${txtbol}${txtgre}   ** ${1}${txtres}"
-}
-function warning() {
-  echo "${txtbol}${txtyel}  *** ${1}${txtres}"
-}
-function error() {
-  echo "${txtbol}${txtred} **** ${1}${txtres}"
-}
-function question() {
-  echo -n "${txtbol}${txtblu}    ? ${1}?${txtres} "
-}
-
-################################################################################
 
 # Super User invocation required.
 # Make sure only root can run our script
