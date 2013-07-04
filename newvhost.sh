@@ -149,6 +149,17 @@ function create_vhost() {
 EOT
 }
 
+function wordless(){
+  if [[ ! $(which wordless) ]]; then
+    warning "You need wordless gem installed in order to bootstrap a new"
+    warning "WordLess project"
+
+    exit 1
+  fi
+
+  $(which wordless) new $folder --locale=$wordless_locale
+}
+
 # Super User invocation required.
 # Make sure only root can run our script
 if [ "$(id -u)" != "0" ]; then
@@ -185,12 +196,14 @@ if [[ $# -eq 0 ]]; then
 fi
 
 # Grab arguments
-while getopts "s:da:i" opt; do
+while getopts "s:da:iwL:" opt; do
     case $opt in
         i) init_rc $hostrcfile ;;
         s) site=$OPTARG ;;
         d) dbcreate=true ;;
         a) firstleveldomain=$OPTARG ;;
+        w) wordless=true ;;
+        L) wordless_locale=$OPTARG ;;
         *) usage ;;
     esac
 done
@@ -200,6 +213,7 @@ localweb=${docroot}
 site=${site}${firstleveldomain}
 folder=${localweb}/${site}
 vhostConf="${apacheconfpath}/${site}"
+[[ $wordless_locale -ne '' ]] || wordless_locale = 'it_IT';
 
 
 # Project's folder creation
@@ -270,6 +284,15 @@ if [[ $? == 0 ]]; then
   success "Done"
 else
   error "Could't reload apache executing '${apachecmd}'"
+fi
+
+# Bootstrapping WordLess
+info "Bootstrapping WordLess..."
+wordless
+if [[ $? == 0 ]]; then  
+  success "Done"
+else
+  error "Error occurred"
 fi
 
 # Coding the project...it's your turn now
