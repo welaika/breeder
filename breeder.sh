@@ -1,14 +1,49 @@
 #!/bin/bash
-# Set a new vhost in lamp for Linux
-# .vhostrc is adaptable for LAMPP. Just add in your
+# Set a new vhost in LAMP for Linux for developing purpose
+# 
+# .vhostrc is adaptable for XAMPP/MAMPP. Just add in your
 # /opt/lampp/etc/httpd.conf a section like this:
 #
 # # Virtual hosts
-# Include etc/extra/httpd-vhosts.conf
+# Include etc/extra/httpd-vhosts.conf #Already present by deafult
 # Include etc/extra/sites-enabled/*
 #
 # and create such dir:
 # mkdir /opt/lampp/etc/extra/sites-enabled/
+# 
+# then configure your $HOME/.vhostrc accordingly
+# 
+# Nothing to configure here anyway. Enjoy
+
+
+##############################################################################
+
+# Text color variables
+txtred=$(tput setaf 1)  #Red
+txtgre=$(tput setaf 2)  # Green
+txtyel=$(tput setaf 3)  # Yellow
+txtblu=$(tput setaf 4)  # Blue
+txtbol=$(tput bold)     # Bold
+txtres=$(tput sgr0)     # Reset
+
+# Helper feedback functions
+function info() {
+  echo "${txtbol}    * ${1}${txtres}"
+}
+function success() {
+  echo "${txtbol}${txtgre}   ** ${1}${txtres}"
+}
+function warning() {
+  echo "${txtbol}${txtyel}  *** ${1}${txtres}"
+}
+function error() {
+  echo "${txtbol}${txtred} **** ${1}${txtres}"
+}
+function question() {
+  echo -n "${txtbol}${txtblu}    ? ${1}?${txtres} "
+}
+
+##############################################################################
 
 
 function usage {
@@ -18,7 +53,8 @@ function usage {
   echo "    -a '.com' (is your first level domain, default is defined in .vhostrc)"
   echo "    -d activate creation of a new DB"
   echo "    -i initialize creating .vhostrc file"
-  echo "    -l activate symlinking from custom DocRoot to Apache DocRoot (deprecated)"
+  echo "    -w bootstrap a wordless project inside my new vhost"
+  echo "    -L specify a local for WordPress (defaults to it_IT)"
 
   exit 1
 }
@@ -33,15 +69,17 @@ fi
   cat >> $1 << EOT
 # Configuration file for newvhost script
 #
-# .vhostrc is adaptable for LAMPP. Just add in your
+# .vhostrc is adaptable for XAMPP/MAMPP. Just add in your
 # /opt/lampp/etc/httpd.conf a section like this:
 #
 # # Virtual hosts
-# Include etc/extra/httpd-vhosts.conf
+# Include etc/extra/httpd-vhosts.conf #Already present by deafult
 # Include etc/extra/sites-enabled/*
 #
 # and create such dir:
 # mkdir /opt/lampp/etc/extra/sites-enabled/
+# 
+# then configure your $HOME/.vhostrc accordingly
 
 # Example configuration is based upon a Apache2 installation on Ubuntu Oneiric
 
@@ -54,13 +92,8 @@ web_group="www-data"
 # Directory in which apache will save log files [ NO TRAILING SLASH ]
 logdir="/var/log"
 
-# For symlinking from your custom DocRoot to the Apache DocRoot configure
-# both the following options; esle just one of the two will be ok.
-#
 # The Apache document root
 docroot="/var/www"
-# Your custom document root
-localweb=""
 
 # The first level domain to be applied to all created vhosts
 # default; used if no other is passed through relative flag
@@ -88,6 +121,7 @@ EOT
   exit 0
 }
 
+# Write the vhost standalone conf file
 function create_vhost() {
   local docroot=$2
   local site=$3
@@ -115,32 +149,16 @@ function create_vhost() {
 EOT
 }
 
-# Text color variables
-txtred=$(tput setaf 1)  #Red
-txtgre=$(tput setaf 2)  # Green
-txtyel=$(tput setaf 3)  # Yellow
-txtblu=$(tput setaf 4)  # Blue
-txtbol=$(tput bold)     # Bold
-txtres=$(tput sgr0)     # Reset
+function wordless(){
+  if [[ ! -x `sudo -u pioneerskies bash -l -c "which wordless"` ]]; then
+    warning "You need wordless gem installed in order to bootstrap a new"
+    warning "WordLess project"
 
-# Helper feedback functions
-function info() {
-  echo "${txtbol}    * ${1}${txtres}"
-}
-function success() {
-  echo "${txtbol}${txtgre}   ** ${1}${txtres}"
-}
-function warning() {
-  echo "${txtbol}${txtyel}  *** ${1}${txtres}"
-}
-function error() {
-  echo "${txtbol}${txtred} **** ${1}${txtres}"
-}
-function question() {
-  echo -n "${txtbol}${txtblu}    ? ${1}?${txtres} "
-}
+    exit 1
+  fi
 
-################################################################################
+  sudo -u pioneerskies bash -l -c "wordless new $folder --locale=$wordless_locale"
+}
 
 # Super User invocation required.
 # Make sure only root can run our script
@@ -149,6 +167,7 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
+# Source .vhostrc or create it if not present
 hostrcfile="/home/${SUDO_USER}/.vhostrc"
 if [[ ! -f ${hostrcfile} ]]; then
   warning "Cannot find a .vhostrc file in your (${SUDO_USER}) home folder"
@@ -176,25 +195,28 @@ if [[ $# -eq 0 ]]; then
     usage
 fi
 
-while getopts "s:lda:i" opt; do
+# Grab arguments
+while getopts "s:da:iwL:" opt; do
     case $opt in
         i) init_rc $hostrcfile ;;
         s) site=$OPTARG ;;
-        l) symlink=true ;;
         d) dbcreate=true ;;
         a) firstleveldomain=$OPTARG ;;
+        w) wordless=true ;;
+        L) wordless_locale=$OPTARG ;;
         *) usage ;;
     esac
 done
 
-if [[ ! $localweb ]]; then
-  localweb=${docroot}
-fi
+# Setup common variables
+localweb=${docroot}
 site=${site}${firstleveldomain}
 folder=${localweb}/${site}
 vhostConf="${apacheconfpath}/${site}"
+[[ $wordless_locale -ne '' ]] || wordless_locale='it_IT';
 
 
+# Project's folder creation
 if [[ ! -d ${folder} ]]; then
   info "'${folder}' does not exists, creating..." 
   mkdir ${folder}
@@ -210,10 +232,11 @@ else
   info "Folder '${folder}' already exists"
 fi
 
+# Chowning the project's folder
 chown ${SUDO_USER}:${web_group} $folder
 chmod 770 $folder
 
-
+# Creating vhost standalone conf file
 if [[ ! -f $vhostConf ]]; then
   info "Creating VHost file..."
   create_vhost $vhostConf ${localweb} ${site} ${logdir}
@@ -228,12 +251,7 @@ else
   info "VHost file already exists"
 fi
 
-
-if [[ $symlink ]]; then
-  ln -s ${localweb}/${site} ${docroot}
-fi
-
-
+# Adding the domain in /etc/hosts
 if [[ ! $(grep ${site} /etc/hosts) ]]; then
   info "Writing '${site}' in /etc/hosts"
   echo "127.0.0.1 $site" >> /etc/hosts
@@ -241,6 +259,7 @@ else
   info "'${site}' is already in the /etc/hosts file"
 fi
 
+# Creating DB
 if [[ $dbcreate ]]; then
   dbname=${db_prefix}$(basename ${site} ${firstleveldomain})
   info "Creting database '${dbname}'..."
@@ -258,6 +277,7 @@ if [[ $dbcreate ]]; then
   fi
 fi
 
+# Realoading apache
 info "Reloading Apache server..."
 ${apachecmd} reload 1>&2>&/dev/null
 if [[ $? == 0 ]]; then  
@@ -266,3 +286,13 @@ else
   error "Could't reload apache executing '${apachecmd}'"
 fi
 
+# Bootstrapping WordLess
+info "Bootstrapping WordLess..."
+wordless
+if [[ $? == 0 ]]; then  
+  success "Done"
+else
+  error "Error occurred"
+fi
+
+# Coding the project...it's your turn now
