@@ -213,7 +213,7 @@ localweb=${docroot}
 site=${site}${firstleveldomain}
 folder=${localweb}/${site}
 vhostConf="${apacheconfpath}/${site}"
-[[ $wordless_locale -ne '' ]] || wordless_locale = 'it_IT';
+[[ $wordless_locale -ne '' ]] || wordless_locale='it_IT';
 
 
 # Project's folder creation
