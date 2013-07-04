@@ -53,7 +53,8 @@ function usage {
   echo "    -a '.com' (is your first level domain, default is defined in .vhostrc)"
   echo "    -d activate creation of a new DB"
   echo "    -i initialize creating .vhostrc file"
-  echo "    -l activate symlinking from custom DocRoot to Apache DocRoot (deprecated)"
+  echo "    -w bootstrap a wordless project inside my new vhost"
+  echo "    -L specify a local for WordPress (defaults to it_IT)"
 
   exit 1
 }
