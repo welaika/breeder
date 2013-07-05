@@ -17,6 +17,11 @@
 
 
 
+function load_libs() {
+  for lib in `ls ./lib`; do
+    source ./lib/${lib}
+  done
+}
 
 
 
@@ -28,11 +33,6 @@ function init(){
   [[ $wordless_locale -ne '' ]] || wordless_locale='it_IT';
 }
 
-function load_libs() {
-  for lib in `ls ./lib`; do
-    source $lib
-  done
-}
 
 function require_root_user() {
   if [ "$(id -u)" != "0" ]; then
