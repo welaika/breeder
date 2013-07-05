@@ -150,14 +150,14 @@ EOT
 }
 
 function wordless(){
-  if [[ ! -x `sudo -u pioneerskies bash -l -c "which wordless"` ]]; then
+  if [[ ! -x `sudo -u $SUDO_USER bash -l -c "which wordless"` ]]; then
     warning "You need wordless gem installed in order to bootstrap a new"
     warning "WordLess project"
 
     exit 1
   fi
 
-  sudo -u pioneerskies bash -l -c "wordless new $folder --locale=$wordless_locale"
+  sudo -u $SUDO_USER bash -l -c "wordless new $folder --locale=$wordless_locale"
 }
 
 # Super User invocation required.
