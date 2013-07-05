@@ -15,24 +15,10 @@
 #
 # Nothing to configure here anyway. Enjoy
 
-##############################################################################
 
-init
 
-load_libs
-require_root_user
-source_or_create_vhostrc
-manage_arguments
 
-create_project_folder
-create_vhost_file
-update_etc_hosts
-create_database
-reload_apache
 
-bootstrap_wordless
-
-##############################################################################
 
 function init(){
   localweb=${docroot}
@@ -165,4 +151,21 @@ function bootstrap_wordless() {
   fi
 }
 
+##############################################################################
+
+load_libs
+
+require_root_user
+
+initialize $@ #Passing all the arguments to the initializer
+
+create_project_folder
+create_vhost_file
+update_etc_hosts
+update_database
+reload_apache
+
+bootstrap_wordless
+
+##############################################################################
 # Coding the project...it's your turn now
