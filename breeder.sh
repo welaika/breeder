@@ -16,6 +16,11 @@
 # Nothing to configure here anyway. Enjoy
 
 
+function initialize() {
+  source_or_create_vhostrc
+  manage_arguments $@
+  set_variables
+}
 
 function load_libs() {
   for lib in `ls ./lib`; do
@@ -23,12 +28,29 @@ function load_libs() {
   done
 }
 
+function manage_arguments(){
+  if [[ $# -eq 0 ]]; then
+      error 'Shit we have no arguments here, bro!'
+      usage
+  fi
 
+  while getopts "s:da:iwL:" opt; do
+      case $opt in
+          i) init_rc $hostrcfile ;;
+          s) site=$OPTARG ;;
+          d) dbcreate=true ;;
+          a) firstleveldomain=$OPTARG ;;
+          w) wordless=true ;;
+          L) wordless_locale=$OPTARG ;;
+          *) usage ;;
+      esac
+  done
+}
 
-function init(){
+function set_variables() {
   localweb=${docroot}
   site=${site}${firstleveldomain}
-  folder=${localweb}/${site}
+  [[ $localweb && $site ]] && folder="${localweb}/${site}" || folder='EMPTY'
   vhostConf="${apacheconfpath}/${site}"
   [[ $wordless_locale -ne '' ]] || wordless_locale='it_IT';
 }
@@ -62,25 +84,6 @@ function source_or_create_vhostrc() {
   else
     source ${hostrcfile}
   fi
-}
-
-function manage_arguments(){
-  if [[ $# -eq 0 ]]; then
-      error 'Shit we have no arguments here, bro!'
-      usage
-  fi
-
-  while getopts "s:da:iwL:" opt; do
-      case $opt in
-          i) init_rc $hostrcfile ;;
-          s) site=$OPTARG ;;
-          d) dbcreate=true ;;
-          a) firstleveldomain=$OPTARG ;;
-          w) wordless=true ;;
-          L) wordless_locale=$OPTARG ;;
-          *) usage ;;
-      esac
-  done
 }
 
 function create_project_folder(){
@@ -141,4 +144,5 @@ reload_apache
 bootstrap_wordless
 
 ##############################################################################
+
 # Coding the project...it's your turn now
