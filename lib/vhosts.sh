@@ -88,3 +88,18 @@ function create_vhost() {
 EOT
 }
 
+function create_vhost_file() {
+  if [[ ! -f $vhostConf ]]; then
+    info "Creating VHost file..."
+    create_vhost $vhostConf $localweb $site $logdir
+
+    if [[ -f $vhostConf ]]; then
+      success "VHost correctly created"
+    else
+      error "VHost could not be created, aborting..."
+      exit 1
+    fi
+  else
+    info "VHost file already exists"
+  fi
+}
