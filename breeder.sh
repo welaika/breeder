@@ -104,12 +104,7 @@ function create_project_folder(){
 }
 
 function update_etc_hosts() {
-  if [[ ! $(grep ${site} /etc/hosts) ]]; then
-    info "Writing '${site}' in /etc/hosts"
-    echo "127.0.0.1 $site" >> /etc/hosts
-  else
-    info "'${site}' is already in the /etc/hosts file"
-  fi
+  add_etc_hosts_entry $site
 }
 
 function create_database() {
