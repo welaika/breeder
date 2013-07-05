@@ -1,20 +1,23 @@
 #!/bin/bash
+
 # Set a new vhost in LAMP for Linux for developing purpose
 #
 # .vhostrc is adaptable for XAMPP/MAMPP. Just add in your
 # /opt/lampp/etc/httpd.conf a section like this:
 #
-# # Virtual hosts
-# Include etc/extra/httpd-vhosts.conf #Already present by deafult
-# Include etc/extra/sites-enabled/*
+#   # Virtual hosts
+#   Include etc/extra/httpd-vhosts.conf #Already present by deafult
+#   Include etc/extra/sites-enabled/*
 #
 # and create such dir:
-# mkdir /opt/lampp/etc/extra/sites-enabled/
+#
+#   mkdir /opt/lampp/etc/extra/sites-enabled/
 #
 # then configure your $HOME/.vhostrc accordingly
 #
 # Nothing to configure here anyway. Enjoy
 
+##############################################################################
 
 function initialize() {
   source_or_create_vhostrc
@@ -23,28 +26,28 @@ function initialize() {
 }
 
 function load_libs() {
-  for lib in `ls ./lib`; do
-    source ./lib/${lib}
+  for lib in `find lib`; do
+    source $lib
   done
 }
 
 function manage_arguments(){
   if [[ $# -eq 0 ]]; then
-      error 'Shit we have no arguments here, bro!'
-      usage
+    error 'Shit we have no arguments here, bro!'
+    usage
   fi
 
   while getopts "s:da:iwL:h" opt; do
-      case $opt in
-          i) init_rc $hostrcfile ;;
-          s) site=$OPTARG ;;
-          d) dbcreate=true ;;
-          a) firstleveldomain=$OPTARG ;;
-          w) wordless=true ;;
-          L) wordless_locale=$OPTARG ;;
-          h) usage ;;
-          *) usage ;;
-      esac
+    case $opt in
+      i) init_rc $hostrcfile ;;
+      s) site=$OPTARG ;;
+      d) dbcreate=true ;;
+      a) firstleveldomain=$OPTARG ;;
+      w) wordless=true ;;
+      L) wordless_locale=$OPTARG ;;
+      h) usage ;;
+      *) usage ;;
+    esac
   done
 }
 
@@ -56,11 +59,10 @@ function set_variables() {
   [[ $wordless_locale -ne '' ]] || wordless_locale='it_IT';
 }
 
-
 function require_root_user() {
   if [ "$(id -u)" != "0" ]; then
-     error "This script must be run as root" 1>&2
-     exit 1
+    error "This script must be run as root" 1>&2
+    exit 1
   fi
 }
 
@@ -104,7 +106,6 @@ function create_project_folder(){
   else
     info "Folder '${folder}' already exists"
   fi
-
 }
 
 function update_etc_hosts() {
@@ -133,10 +134,10 @@ function bootstrap_wordless() {
 ##############################################################################
 
 load_libs
-
 require_root_user
 
-initialize $@ #Passing all the arguments to the initializer
+# Passing all the arguments to the initializer
+initialize $@
 
 create_project_folder
 create_vhost_file

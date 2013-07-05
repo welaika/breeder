@@ -52,7 +52,6 @@ db_prefix=""
 mysqlcmd=$(which mysql)
 # Apache2 executable ( needed to restart apache )
 apachecmd="service apache2"
-
 EOT
 
   chown ${SUDO_USER}:${SUDO_USER} $1
@@ -103,3 +102,4 @@ function create_vhost_file() {
     info "VHost file already exists"
   fi
 }
+
