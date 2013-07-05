@@ -1,0 +1,126 @@
+# Breeder
+
+### Let it bring up your local virtual hosts
+
+Breeder is crafted for developers, who want to set up a local **LAMPP** virtual
+host with a single command in your terminal.
+
+It assumes that you have already set up your LAMPP environement, and that you
+know how it is configured. If you're a dev, you'll certanly know! :)
+
+#### In a hurry
+
+		git clone git@github.com:welaika/breeder.git
+		cd breeder
+		sudo ./breeder.sh -i
+
+Now read and edit the just created `~/.vhostrc`
+
+		vim ~/.vhostrc
+
+Now enjoy
+
+		sudo ./breeder.sh -s mysite
+
+Open a browser and go to *http://mysite.local* and start coding
+
+#### In depth
+
+##### .vhostrc
+
+Here you have to configure the following:
+
+		apacheconfpath='/etc/apache2/sites-enabled'
+		web_group="www-data"
+		logdir="/var/log"
+		docroot="/var/www"
+		firstleveldomain='.local'
+		serveradmin="root@localhost"
+		mysqluser="root"
+		mysqlpwd=""
+		db_prefix=""
+		mysqlcmd=$(which mysql)
+		apachecmd="service apache2"
+
+read the in-line comments and all will be clear. Drop an issue if not.
+
+All should be adaptable for any Linux distro and for Mac, [XM]AMPP included,
+if you know your
+business.
+
+##### Command line options
+
+Script must be run with `sudo`. Here the flags:
+
+		Usage: breeder.sh -s example [options]
+		Possible options are:
+		    -s mysitename (mandatory, without first level domain)
+		    -a '.com' (is your first level domain, default is defined in .vhostrc)
+		    -d activate creation of a new DB
+		    -i initialize creating .vhostrc file
+		    -w bootstrap a wordless project inside my new vhost
+		    -L specify a local for WordPress (defaults to it_IT)
+		    -h display this help
+
+##### The dirty work
+
+When you call `sudo ./breeder.sh -s example` will happen the following
+(default .vhostrc assumed):
+
+* `/var/www/example.local` will be created
+* a stand alone vhost config for example.local will be dropped inside
+`/etc/apache2/sites-enabled`. (N.B.: sites-available is not considered)
+	
+		<VirtualHost *:80>
+		  ServerAdmin root@localhost
+		  ServerName example.com
+
+		  DocumentRoot /var/www/example.com
+		  <Directory var/www/example.com>
+		    Options Indexes FollowSymLinks MultiViews
+		    AllowOverride All
+		    Order allow,deny
+		    Allow from all
+		  </Directory>
+
+		  ErrorLog /var/log/example.com.error.log
+		  # Possible values include: debug, info, notice, warn, error, crit, alert,
+		  # emerg.
+		  LogLevel debug
+		  CustomLog /var/log/example.com.access.log combined
+		</VirtualHost>
+
+* `127.0.0.1 example.local` will be added in `/etc/hosts`
+* will be created a database named *example*
+* apache will be reloaded
+
+##### Bootstrapping WordLess
+
+If you'd like to bootstrap a [WordLess](http://welaika.github.com/wordless) project
+than try
+
+		sudo ./breeder.sh -s example -w
+
+or
+
+		sudo ./breeder.sh -s example -w -L en_US
+
+This command will add these behaviours:
+
+* install WordPress (localised, if you choosen -L flag) inside `/var/www/example.local`
+* install WordLess plugin inside `/var/www/example.local/wp-content/plugins`
+* initialize a fresh WordLess teheme: `/var/www/example.local/wp-content/themes/example.local`
+
+______
+
+## License
+
+(The MIT License)
+
+Copyright © 2011 weLaika
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
