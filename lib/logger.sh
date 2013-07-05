@@ -23,3 +23,12 @@ function question() {
   echo -n "${txtbol}${txtblu}    ? ${1}?${txtres} "
 }
 
+function if_error() {
+	local error_message=$2
+
+	if [[ $? == 0 ]]; then
+    success "Done"
+  else
+    error $error_message
+  fi
+}
