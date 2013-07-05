@@ -129,21 +129,14 @@ function create_database() {
 function reload_apache() {
   info "Reloading Apache server..."
   ${apachecmd} reload 1>&2>&/dev/null
-  if [[ $? == 0 ]]; then
-    success "Done"
-  else
-    error "Could't reload apache executing '${apachecmd}'"
-  fi
+
+  if_error "Could't reload apache executing '${apachecmd}'"
 }
 
 function bootstrap_wordless() {
   info "Bootstrapping WordLess..."
   wordless
-  if [[ $? == 0 ]]; then
-    success "Done"
-  else
-    error "Error occurred"
-  fi
+  if_error "Error occurred"
 }
 
 ##############################################################################
