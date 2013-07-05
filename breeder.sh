@@ -122,8 +122,10 @@ function reload_apache() {
 }
 
 function bootstrap_wordless() {
-  info "Bootstrapping WordLess..."
-  wordless
+  if [[ $wordless ]]; then
+    info "Bootstrapping WordLess..."
+    wordless;
+  fi
   if_error "Error occurred"
 }
 
