@@ -34,7 +34,7 @@ function manage_arguments(){
       usage
   fi
 
-  while getopts "s:da:iwL:" opt; do
+  while getopts "s:da:iwL:h" opt; do
       case $opt in
           i) init_rc $hostrcfile ;;
           s) site=$OPTARG ;;
@@ -42,6 +42,7 @@ function manage_arguments(){
           a) firstleveldomain=$OPTARG ;;
           w) wordless=true ;;
           L) wordless_locale=$OPTARG ;;
+          h) usage ;;
           *) usage ;;
       esac
   done

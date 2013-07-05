@@ -7,6 +7,7 @@ function usage {
   echo "    -i initialize creating .vhostrc file"
   echo "    -w bootstrap a wordless project inside my new vhost"
   echo "    -L specify a local for WordPress (defaults to it_IT)"
+  echo "    -h display this help"
 
   exit 1
 }
