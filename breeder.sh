@@ -26,7 +26,7 @@ function initialize() {
 }
 
 function load_libs() {
-  for lib in `find lib`; do
+  for lib in `find lib/*`; do
     source $lib
   done
 }
