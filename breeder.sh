@@ -92,6 +92,8 @@ function create_project_folder(){
     mkdir ${folder}
 
     if [[ -d ${folder} ]]; then
+      chown ${SUDO_USER}:${web_group} $folder
+      chmod 770 $folder
       success "Folder correctly created"
     else
       error "Dear, I'm not able to create the site directory in your DocRoot. Go and create it, than retry!"
@@ -102,8 +104,6 @@ function create_project_folder(){
     info "Folder '${folder}' already exists"
   fi
 
-  chown ${SUDO_USER}:${web_group} $folder
-  chmod 770 $folder
 }
 
 function update_etc_hosts() {
