@@ -107,23 +107,8 @@ function update_etc_hosts() {
   add_etc_hosts_entry $site
 }
 
-function create_database() {
-  if [[ $dbcreate ]]; then
-    dbname=${db_prefix}$(basename ${site} ${firstleveldomain})
-    info "Creting database '${dbname}'..."
-
-    if [[ ${mysqlpwd} ]]; then
-        ${mysqlcmd} -u ${mysqluser} -p${mysqlpwd} -e "CREATE DATABASE IF NOT EXISTS ${dbname}"
-    else
-      ${mysqlcmd} -u ${mysqluser} -e "CREATE DATABASE IF NOT EXISTS ${dbname}"
-    fi
-    # echo $?
-    if [[ $? != 0 ]]; then
-      error "Cannot create database '${dbname}', please create in manually"
-    else
-      success "Database created"
-    fi
-  fi
+function update_database() {
+  [[ $dbcreate ]] && create_database
 }
 
 function reload_apache() {
