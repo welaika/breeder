@@ -266,7 +266,7 @@ if [[ $dbcreate ]]; then
 
   if [[ ${mysqlpwd} ]]; then
       ${mysqlcmd} -u ${mysqluser} -p${mysqlpwd} -e "CREATE DATABASE IF NOT EXISTS ${dbname}"
-  elif [[ $dbcreate ]]; then
+  else
     ${mysqlcmd} -u ${mysqluser} -e "CREATE DATABASE IF NOT EXISTS ${dbname}"
   fi
   # echo $?
