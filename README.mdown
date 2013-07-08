@@ -73,21 +73,21 @@ When you call `sudo ./breeder.sh -s example` will happen the following
 	
 		<VirtualHost *:80>
 		  ServerAdmin root@localhost
-		  ServerName example.com
+		  ServerName example.local
 
-		  DocumentRoot /var/www/example.com
-		  <Directory var/www/example.com>
+		  DocumentRoot /var/www/example.local
+		  <Directory var/www/example.local>
 		    Options Indexes FollowSymLinks MultiViews
 		    AllowOverride All
 		    Order allow,deny
 		    Allow from all
 		  </Directory>
 
-		  ErrorLog /var/log/example.com.error.log
+		  ErrorLog /var/log/example.local.error.log
 		  # Possible values include: debug, info, notice, warn, error, crit, alert,
 		  # emerg.
 		  LogLevel debug
-		  CustomLog /var/log/example.com.access.log combined
+		  CustomLog /var/log/example.local.access.log combined
 		</VirtualHost>
 
 * `127.0.0.1 example.local` will be added in `/etc/hosts`
