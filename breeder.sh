@@ -19,8 +19,15 @@
 
 ##############################################################################
 
+
 function load_libs() {
-	for lib in `find lib -name '*.sh'`; do
+	if [[ ! -e /usr/local/bin/breeder && ! -d /usr/local/lib/breeder ]]; then
+		echo 'WARNING: Breeder is not installed. You should `sudo make install`'
+		echo '	and use the `breeder` command instead of invoke it directly'
+		exit 1
+	fi
+
+	for lib in `find /usr/local/lib/breeder/ -name '*.sh'`; do
 		source $lib
 	done
 }
