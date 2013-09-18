@@ -19,6 +19,8 @@
 
 ##############################################################################
 
+BR_LIB='/usr/local/lib/breeder'
+BR_BIN='/usr/local/bin/breeder'
 
 function load_libs() {
 	if [[ ! -e /usr/local/bin/breeder && ! -d /usr/local/lib/breeder ]]; then
@@ -27,15 +29,9 @@ function load_libs() {
 		exit 1
 	fi
 
-	for lib in `find /usr/local/lib/breeder/ -name '*.sh'`; do
+	for lib in `find ${BR_LIB} -name '*.sh'`; do
 		source $lib
 	done
-}
-
-function initialize() {
-	source_or_create_vhostrc
-	manage_arguments $@
-	set_variables
 }
 
 function set_variables() {
@@ -52,6 +48,13 @@ function reload_apache() {
 
 	if_error "Could't reload apache executing '${apachecmd}'"
 }
+
+function initialize() {
+	source_or_create_vhostrc
+	manage_arguments $@
+	set_variables
+}
+
 
 
 
