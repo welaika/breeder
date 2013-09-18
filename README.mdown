@@ -11,8 +11,8 @@ know how it is configured. If you're a dev, you'll certanly know! :)
 #### In a hurry
 
 		git clone git@github.com:welaika/breeder.git
-		cd breeder
-		sudo ./breeder.sh -i
+		cd breeder && sudo make install
+		sudo breeder -i
 
 Now read and edit the just created `~/.vhostrc`
 
@@ -20,7 +20,7 @@ Now read and edit the just created `~/.vhostrc`
 
 Now enjoy
 
-		sudo ./breeder.sh -s mysite
+		sudo breeder -s mysite
 
 Open a browser and go to *http://mysite.local* and start coding
 
@@ -45,8 +45,7 @@ Here you have to configure the following:
 read the in-line comments and all will be clear. Drop an issue if not.
 
 All should be adaptable for any Linux distro and for Mac, [XM]AMPP included,
-if you know your
-business.
+if you know your business.
 
 ##### Command line options
 
@@ -64,7 +63,7 @@ Script must be run with `sudo`. Here the flags:
 
 ##### The dirty work
 
-When you call `sudo ./breeder.sh -s example` will happen the following
+When you call `sudo breeder -s example` will happen the following
 (default .vhostrc assumed):
 
 * `/var/www/example.local` will be created
@@ -99,11 +98,11 @@ When you call `sudo ./breeder.sh -s example` will happen the following
 If you'd like to bootstrap a [WordLess](http://welaika.github.com/wordless) project
 than try
 
-		sudo ./breeder.sh -s example -w
+		sudo breeder -s example -w
 
 or
 
-		sudo ./breeder.sh -s example -w -L en_US
+		sudo breeder -s example -w -L en_US
 
 This command will add these behaviours:
 
