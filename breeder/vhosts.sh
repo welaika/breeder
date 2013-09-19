@@ -7,7 +7,7 @@ function init_rc() {
 
 	cat ${BR_LIB}/vhostrc >> $1
 
-	chown ${SUDO_USER}:${SUDO_USER} $1
+	chown br_user:br_user $1
 	success ".vhostrc file created in your home"
 	exit 0
 }
