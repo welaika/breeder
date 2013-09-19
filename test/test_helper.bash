@@ -4,8 +4,17 @@ fixtures() {
 
 setup() {
 	export TMP="$BATS_TEST_DIRNAME/tmp"
+	export PREFIX=$TMP
+
+	(
+		pushd $BATS_TEST_DIRNAME/../
+		make install
+		popd
+	) > /dev/null
+
+	export PATH="$TMP/bin/:$PATH"
 }
 
 teardown() {
-	rm -f "$TMP"/*
+	rm -rf "$TMP"
 }
