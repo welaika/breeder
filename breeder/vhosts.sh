@@ -5,54 +5,7 @@ function init_rc() {
 		exit 1;
 	fi
 
-	cat >> $1 << EOT
-# Configuration file for newvhost script
-#
-# .vhostrc is adaptable for XAMPP/MAMPP. Just add in your
-# /opt/lampp/etc/httpd.conf a section like this:
-#
-# # Virtual hosts
-# Include etc/extra/httpd-vhosts.conf #Already present by deafult
-# Include etc/extra/sites-enabled/*
-#
-# and create such dir:
-# mkdir /opt/lampp/etc/extra/sites-enabled/
-#
-# then configure your $HOME/.vhostrc accordingly
-
-# Example configuration is based upon a Apache2 installation on Ubuntu Oneiric
-
-# Path to the vhosts folder [ NO TRAILING SLASH ]
-apacheconfpath='/etc/apache2/sites-enabled'
-
-# the group of apache webserver ( and you must be in that group )
-web_group="www-data"
-
-# Directory in which apache will save log files [ NO TRAILING SLASH ]
-logdir="/var/log"
-
-# The Apache document root
-docroot="/var/www"
-
-# The first level domain to be applied to all created vhosts
-# default; used if no other is passed through relative flag
-firstleveldomain='.local'
-# Server administrator email
-serveradmin="root@localhost"
-
-# MySQL server access data
-mysqluser="root"
-mysqlpwd=""
-# A prefix to be added to all database created
-db_prefix=""
-
-# The absolute path to the MySQL executable ( needed to create the database )
-# Pay attention if you're using LAMPP: to have the executable in $PATH is your
-# business
-mysqlcmd=$(which mysql)
-# Apache2 executable ( needed to restart apache )
-apachecmd="service apache2"
-EOT
+	cat ${BR_LIB}/vhostrc >> $1
 
 	chown ${SUDO_USER}:${SUDO_USER} $1
 	success ".vhostrc file created in your home"
