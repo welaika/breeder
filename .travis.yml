@@ -1,0 +1,6 @@
+language: perl
+perl:
+  - "5.16"
+before_script:
+  - ./setup_tests.sh
+script: "bats test"
