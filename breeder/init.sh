@@ -26,15 +26,15 @@ function manage_arguments(){
 
 function require_root_user() {
 	if [ "$(id -u)" != "0" ]; then
-		error "This script must be run as root" 1>&2
-		exit 1
+		error "This script should be run as root. Probably it will fail" 1>&2
+		# exit 1
 	fi
 }
 
 function source_or_create_vhostrc() {
-	hostrcfile="/home/${SUDO_USER}/.vhostrc"
+	hostrcfile="${HOME}/.vhostrc"
 	if [[ ! -f ${hostrcfile} ]]; then
-		warning "Cannot find a .vhostrc file in your (${SUDO_USER}) home folder"
+		warning "Cannot find a .vhostrc file in $HOME"
 		question "Would you like to create one [y/n]"
 		[[ $BR_INTERACTIVE == "true" ]] && read answer
 
@@ -54,13 +54,13 @@ function source_or_create_vhostrc() {
 	fi
 }
 
-function create_project_folder(){
+function create_project_folder() {
 	if [[ ! -d ${folder} ]]; then
 		info "'${folder}' does not exists, creating..."
 		mkdir ${folder}
 
 		if [[ -d ${folder} ]]; then
-			chown ${SUDO_USER}:${web_group} $folder
+			chown br_user:${web_group} $folder
 			chmod 770 $folder
 			success "Folder correctly created"
 		else
@@ -70,5 +70,13 @@ function create_project_folder(){
 		fi
 	else
 		info "Folder '${folder}' already exists"
+	fi
+}
+
+function br_user() {
+	if [[ $SUDO_COMMAND ]]; then
+		echo $SUDO_USER
+	else
+		echo $(whoami)
 	fi
 }
