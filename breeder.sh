@@ -24,6 +24,7 @@
 BR_PREFIX=${PREFIX:-/usr/local}
 BR_LIB="$BR_PREFIX/lib/breeder"
 BR_BIN="$BR_PREFIX/bin/breeder"
+BR_INTERACTIVE=${BR_INTERACTIVE:-true}
 
 # Nexts are grabbed from command line
 localweb=''
@@ -65,10 +66,11 @@ function reload_apache() {
 ##############################################################################
 
 load_libs
-require_root_user
 
 # Passing all the arguments to the initializer
 initialize $@
+
+require_root_user
 
 create_project_folder
 create_vhost_file

@@ -35,10 +35,10 @@ function source_or_create_vhostrc() {
 	hostrcfile="/home/${SUDO_USER}/.vhostrc"
 	if [[ ! -f ${hostrcfile} ]]; then
 		warning "Cannot find a .vhostrc file in your (${SUDO_USER}) home folder"
-		question "Would you like to create one [Y/n]"
-		read answer
+		question "Would you like to create one [y/n]"
+		[[ $BR_INTERACTIVE == "true" ]] && read answer
 
-		if [[ ${answer} == "Y" || ${answer} == "y" || ${answer} == '' ]]; then
+		if [[ ${answer} == "Y" || ${answer} == "y" ]]; then
 			init_rc $hostrcfile
 			if [[ -s $hostrcfile ]]; then
 				success "rc file correctly created"
