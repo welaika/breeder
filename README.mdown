@@ -8,6 +8,8 @@ host with a single command in your terminal.
 It assumes that you have already set up your LAMPP environement, and that you
 know how it is configured. If you're a dev, you'll certanly know! :)
 
+[![Build Status](https://travis-ci.org/welaika/breeder.png?branch=master)](https://travis-ci.org/welaika/breeder)
+
 #### In a hurry
 
 		git clone git@github.com:welaika/breeder.git
