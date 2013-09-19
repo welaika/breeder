@@ -1,3 +1,9 @@
+function initialize() {
+	source_or_create_vhostrc
+	manage_arguments $@
+	set_variables
+}
+
 function manage_arguments(){
 	if [[ $# -eq 0 ]]; then
 		error 'Shit we have no arguments here, bro!'
