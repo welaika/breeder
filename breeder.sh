@@ -19,8 +19,18 @@
 
 ##############################################################################
 
+## Properties
+
 BR_LIB='/usr/local/lib/breeder'
 BR_BIN='/usr/local/bin/breeder'
+# Nexts are grabbed from command line
+localweb=''
+site=''
+folder=''
+vhostConf=''
+wordless_locale=''
+
+###################
 
 function load_libs() {
 	if [[ ! -e /usr/local/bin/breeder && ! -d /usr/local/lib/breeder ]]; then
@@ -48,14 +58,6 @@ function reload_apache() {
 
 	if_error "Could't reload apache executing '${apachecmd}'"
 }
-
-function initialize() {
-	source_or_create_vhostrc
-	manage_arguments $@
-	set_variables
-}
-
-
 
 
 ##############################################################################
