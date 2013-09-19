@@ -1,5 +1,6 @@
 function wordless(){
-	if [[ ! -x `sudo -u $SUDO_USER bash -l -c "which wordless"` ]]; then
+	local $user=br_user
+	if [[ ! -x `sudo -u $user bash -l -c "which wordless"` ]]; then
 		warning "You need wordless gem installed in order to bootstrap a new"
 		warning "WordLess project"
 
@@ -7,7 +8,7 @@ function wordless(){
 	fi
 
 	pushd $folder > /dev/null
-	sudo -u $SUDO_USER bash -l -c "wordless new $folder --locale=$wordless_locale"
+	sudo -u $user bash -l -c "wordless new $folder --locale=$wordless_locale"
 	popd
 }
 

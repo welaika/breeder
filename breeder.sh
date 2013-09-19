@@ -21,8 +21,11 @@
 
 ## Properties
 
-BR_LIB='/usr/local/lib/breeder'
-BR_BIN='/usr/local/bin/breeder'
+BR_PREFIX=${PREFIX:-/usr/local}
+BR_LIB="$BR_PREFIX/lib/breeder"
+BR_BIN="$BR_PREFIX/bin/breeder"
+BR_INTERACTIVE=${BR_INTERACTIVE:-true}
+
 # Nexts are grabbed from command line
 localweb=''
 site=''
@@ -33,7 +36,7 @@ wordless_locale=''
 ###################
 
 function load_libs() {
-	if [[ ! -e /usr/local/bin/breeder && ! -d /usr/local/lib/breeder ]]; then
+	if [[ ! -d ${BR_LIB} ]]; then
 		echo 'WARNING: Breeder is not installed. You should `sudo make install`'
 		echo '	and use the `breeder` command instead of invoke it directly'
 		exit 1
@@ -63,10 +66,11 @@ function reload_apache() {
 ##############################################################################
 
 load_libs
-require_root_user
 
 # Passing all the arguments to the initializer
 initialize $@
+
+require_root_user
 
 create_project_folder
 create_vhost_file
