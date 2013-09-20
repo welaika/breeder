@@ -28,13 +28,15 @@ docroot="/var/www"
 
 # The first level domain to be applied to all created vhosts
 # default; used if no other is passed through relative flag
-firstleveldomain='.local'
+domain_firstlevel='local'
+
 # Server administrator email
 serveradmin="root@localhost"
 
 # MySQL server access data
 mysqluser="root"
 mysqlpwd=""
+
 # A prefix to be added to all database created
 db_prefix=""
 
@@ -42,5 +44,6 @@ db_prefix=""
 # Pay attention if you're using LAMPP: to have the executable in $PATH is your
 # business
 mysqlcmd=$(which mysql)
+
 # Apache2 executable ( needed to restart apache )
 apachecmd="service apache2"
