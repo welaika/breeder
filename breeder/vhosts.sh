@@ -1,17 +1,3 @@
-function init_rc() {
-
-	if [[ -s $hostrcfile ]]; then
-		warning "already initialized"
-		exit 1;
-	fi
-
-	cat ${BR_LIB}/vhostrc >> $1
-
-	chown br_user:br_user $1
-	success ".vhostrc file created in your home"
-	exit 0
-}
-
 # Write the vhost standalone conf file
 function create_vhost() {
 	local docroot=$2
@@ -41,11 +27,11 @@ EOT
 }
 
 function create_vhost_file() {
-	if [[ ! -f $vhostConf ]]; then
+	if [[ ! -f $vhostconf ]]; then
 		info "Creating VHost file..."
-		create_vhost $vhostConf $localweb $site $logdir
+		create_vhost $vhostconf $localweb $domain $logdir
 
-		if [[ -f $vhostConf ]]; then
+		if [[ -f $vhostconf ]]; then
 			success "VHost correctly created"
 		else
 			error "VHost could not be created, aborting..."
