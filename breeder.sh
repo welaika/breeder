@@ -27,11 +27,23 @@ BR_BIN="$BR_PREFIX/bin/breeder"
 BR_INTERACTIVE=${BR_INTERACTIVE:-true}
 
 # Nexts are grabbed from command line
-localweb=''
-site=''
-folder=''
-vhostConf=''
+domain=''
+domain_secondlevel=''
+domain_firstlevel=''
+vhostconf=''
+configfile=''
 wordless_locale=''
+folder=''
+
+# Nexts are grabbed from conf file
+localweb=''
+firstleveldomain=''
+apachecmd=''
+apacheconfpath=''
+logdir=''
+mysqlcmd=''
+mysqlpwd=''
+mysqluser=''
 
 ###################
 
@@ -46,22 +58,6 @@ function load_libs() {
 		source $lib
 	done
 }
-
-function set_variables() {
-	localweb=${docroot}
-	site=${site}${firstleveldomain}
-	[[ $localweb && $site ]] && folder="${localweb}/${site}" || folder='EMPTY'
-	vhostConf="${apacheconfpath}/${site}"
-	[[ $wordless_locale -ne '' ]] || wordless_locale='it_IT';
-}
-
-function reload_apache() {
-	info "Reloading Apache server..."
-	${apachecmd} reload 1>&2>&/dev/null
-
-	if_error "Could't reload apache executing '${apachecmd}'"
-}
-
 
 ##############################################################################
 
