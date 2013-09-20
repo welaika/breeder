@@ -1,5 +1,5 @@
 function create_database() {
-	dbname=${db_prefix}$(basename ${site} ${firstleveldomain})
+	dbname=$1
 	info "Creting database '${dbname}'..."
 
 	if [[ ${mysqlpwd} ]]; then
@@ -12,5 +12,5 @@ function create_database() {
 }
 
 function update_database() {
-	[[ $dbcreate ]] && create_database
+	[[ $dbcreate ]] && create_database $domain_secondlevel
 }
