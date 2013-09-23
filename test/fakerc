@@ -1,0 +1,13 @@
+THIS_IS='FAKE'
+
+apacheconfpath="$TMP/sites-enabled"
+web_group=$(id -ng)
+logdir="$TMP/log"
+docroot="$TMP/www"
+domain_firstlevel='local'
+serveradmin="root@localhost"
+mysqluser="root"
+mysqlpwd=""
+db_prefix=""
+mysqlcmd=$(which mysql)
+apachecmd="service apache2"
