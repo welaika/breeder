@@ -30,9 +30,16 @@ function question() {
 function if_error() {
 	local error_message=$2
 
-	if [[ $? == 0 ]]; then
-		success "Done"
-	else
+	if [[ $? != 0 ]]; then
 		error $error_message
+		return 0
+	else
+		success "Done"
+		return 1
 	fi
+}
+
+function backup() {
+	cp $1 "$1.bak"
+	warning "File $1 saved as $1.bak"
 }

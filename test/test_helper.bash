@@ -5,7 +5,7 @@ fixtures() {
 setup() {
 	export TMP="$BATS_TEST_DIRNAME/tmp"
 	export PREFIX=$TMP
-	export BR_INTERACTIVE=0
+	export BR_INTERACTIVE="false"
 	export BR_LIB="$PREFIX/lib/breeder"
 	export BR_BIN="$PREFIX/bin/breeder"
 
