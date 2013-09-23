@@ -11,4 +11,3 @@ load test_helper
 	run which breeder
 	[ "$status" -eq 0 ]
 }
-
