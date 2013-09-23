@@ -49,10 +49,10 @@ function source_or_create_config() {
 
 function set_variables() {
 	localweb=${docroot}
-	vhostconf="${apacheconfpath}/${domain}"
 	domain_secondlevel=${userinput_domain_secondlevel}
 	[[ $userinput_domain_firstlevel ]] && domain_firstlevel=$userinput_domain_firstlevel;
 	domain="${domain_secondlevel}.${domain_firstlevel}"
+	vhostconf="${apacheconfpath}/${domain}"
 	[[ $localweb && $domain ]] && folder="${localweb}/${domain}" || folder='EMPTY'
 	[[ $wordless_locale -ne '' ]] || wordless_locale='it_IT';
 }
