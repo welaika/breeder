@@ -29,7 +29,6 @@ BR_INTERACTIVE=${BR_INTERACTIVE:-true}
 # Nexts are grabbed from command line
 domain=''
 domain_secondlevel=''
-domain_firstlevel=''
 vhostconf=''
 configfile=''
 wordless_locale=''
@@ -37,13 +36,15 @@ folder=''
 
 # Nexts are grabbed from conf file
 localweb=''
-firstleveldomain=''
+domain_firstlevel=''
 apachecmd=''
 apacheconfpath=''
+web_group=''
 logdir=''
 mysqlcmd=''
 mysqlpwd=''
 mysqluser=''
+db_prefix=''
 
 ###################
 
