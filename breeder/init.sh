@@ -1,6 +1,6 @@
 function initialize() {
 	manage_arguments $@
-	source_or_create_vhostrc
+	source_or_create_config
 	set_variables
 	init_config $config
 }
@@ -17,7 +17,11 @@ function manage_arguments(){
 			s) userinput_domain_secondlevel=$OPTARG ;;
 			a) userinput_domain_firstlevel=$OPTARG ;;
 			L) wordless_locale=$OPTARG ;;
+<<<<<<< HEAD
 			i) i_flag=true ;;
+=======
+			i) init_config && exit 0 || exit 1 ;;
+>>>>>>> debug
 			d) dbcreate=true ;;
 			w) wordless=true ;;
 			h) usage ;;
@@ -26,29 +30,23 @@ function manage_arguments(){
 	done
 }
 
-function source_or_create_vhostrc() {
+function source_or_create_config() {
 	config=${userinput_config:-"$HOME/.vhostrc"}
 
 	if [[ ! -f ${config} ]]; then
-		warning "Cannot find a .vhostrc file in $HOME"
-		[[ $BR_INTERACTIVE == "true" ]] && (
+		warning "Cannot find a .vhostrc file"
 
+		[[ $BR_INTERACTIVE == "true" ]] && (
 			question "Would you like to create one [Y/n]"
 			read answer
 
 			if [[ ${answer} == "Y" || ${answer} == "y" || ${answer} == '' ]]; then
-				init_rc $config
-				if [[ -s $config ]]; then
-					success "rc file correctly created"
-					info "Please configure the options in .vhostrc in your home dir"
-					exit 0
-				else
-					error "Cannot proceed"
-					exit 1
-				fi
+				init_config
 			fi
-
 		)
+
+		exit $?
+
 	else
 		source ${config}
 	fi
@@ -56,13 +54,12 @@ function source_or_create_vhostrc() {
 
 function set_variables() {
 	localweb=${docroot}
-	vhostconf="${apacheconfpath}/${domain}"
 	domain_secondlevel=${userinput_domain_secondlevel}
 	[[ $userinput_domain_firstlevel ]] && domain_firstlevel=$userinput_domain_firstlevel;
 	domain="${domain_secondlevel}.${domain_firstlevel}"
+	vhostconf="${apacheconfpath}/${domain}"
 	[[ $localweb && $domain ]] && folder="${localweb}/${domain}" || folder='EMPTY'
 	[[ $wordless_locale -ne '' ]] || wordless_locale='it_IT';
-	[[ $i_flag ]] && config_to_be_inititialized=true;
 }
 
 function require_root_user() {
@@ -75,24 +72,28 @@ function require_root_user() {
 }
 
 function init_config() {
-	[[ $config_to_be_inititialized ]] || return 0
+	config=${userinput_config:-"$HOME/.vhostrc"}
 
-	if [[ -s $1 ]]; then
+	if [[ -s $config ]]; then
 		warning "already initialized"
-		exit 1;
+		return 1;
 	fi
 
-	cat ${BR_LIB}/vhostrc >> $1
+	cat ${BR_LIB}/vhostrc >> $config
 
-	chown $(br_user):$(br_user) $1
-	success ".vhostrc file created in your home"
+	chown $(br_user):$(br_user) $config
+
+	if_error "Cannot proceed" && exit 1
+
+	success "rc file correctly created"
+	info "Please configure the options in .vhostrc in your home dir"
 	exit 0
 }
 
 
 function create_project_folder() {
 	if [[ $folder == 'EMPTY' ]]; then
-		error 'There si a problem with your project folder path. Please check "docroot" config in your .vhostrc'
+		error 'There is a problem with your project folder path. Please check "docroot" config in your .vhostrc'
 		exit 1
 	fi
 
