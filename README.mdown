@@ -2,10 +2,10 @@
 
 ### Let it bring up your local virtual hosts
 
-Breeder is crafted for developers, who want to set up a local **LAMPP** virtual
+Breeder is crafted for developers, who want to set up a local **LAMP** virtual
 host with a single command in your terminal.
 
-It assumes that you have already set up your LAMPP environement, and that you
+It assumes that you have already set up your LAMP environement, and that you
 know how it is configured. If you're a dev, you'll certanly know! :)
 
 [![Build Status](https://travis-ci.org/welaika/breeder.png?branch=master)](https://travis-ci.org/welaika/breeder)
@@ -36,7 +36,7 @@ Here you have to configure the following:
 		web_group="www-data"
 		logdir="/var/log"
 		docroot="/var/www"
-		firstleveldomain='.local'
+		domain_firstlevel='local'
 		serveradmin="root@localhost"
 		mysqluser="root"
 		mysqlpwd=""
@@ -49,19 +49,40 @@ read the in-line comments and all will be clear. Drop an issue if not.
 All should be adaptable for any Linux distro and for Mac, [XM]AMPP included,
 if you know your business.
 
+##### {X,M}AMPP
+
+`.vhostrc` is adaptable for XAMPP/MAMPP. Just add in your /opt/lampp/etc/httpd.conf
+(or whatever) a section like this:
+
+```bash
+## Virtual hosts
+Include etc/extra/httpd-vhosts.conf #Already present by deafult
+Include etc/extra/sites-enabled/*
+```
+
+and create the `sites-enabled` dir:
+
+```bash
+mkdir /opt/lampp/etc/extra/sites-enabled/
+```
+
+then configure your `$HOME/.vhostrc` accordingly
+
 ##### Command line options
 
-Script must be run with `sudo`. Here the flags:
+Script must be run with `sudo`. If you won't, it will try to accomplish
+its task anyway, but will warn you about imminent fail. =)
+Here the flags:
 
 		Usage: breeder.sh -s example [options]
 		Possible options are:
-		    -s mysitename (mandatory, without first level domain)
-		    -a '.com' (is your first level domain, default is defined in .vhostrc)
-		    -d activate creation of a new DB
-		    -i initialize creating .vhostrc file
-		    -w bootstrap a wordless project inside my new vhost
-		    -L specify a local for WordPress (defaults to it_IT)
-		    -h display this help
+				-s mysitename (mandatory, without first level domain)
+				-a '.com' (is your first level domain, default is defined in .vhostrc)
+				-d activate creation of a new DB
+				-i initialize creating .vhostrc file
+				-w bootstrap a wordless project inside my new vhost
+				-L specify a locale for WordPress (defaults to it_IT), e.g. -L en_US
+				-h display this help
 
 ##### The dirty work
 
@@ -70,14 +91,14 @@ When you call `sudo breeder -s example` will happen the following
 
 * `/var/www/example.local` will be created
 * a stand alone vhost config for example.local will be dropped inside
-`/etc/apache2/sites-enabled`. (N.B.: sites-available is not considered)
-	
+`/etc/apache2/sites-enabled`. (N.B.: sites-available is ignored)
+
 		<VirtualHost *:80>
 		  ServerAdmin root@localhost
 		  ServerName example.local
 
 		  DocumentRoot /var/www/example.local
-		  <Directory var/www/example.local>
+		  <Directory /var/www/example.local>
 		    Options Indexes FollowSymLinks MultiViews
 		    AllowOverride All
 		    Order allow,deny
@@ -118,7 +139,7 @@ ______
 
 (The MIT License)
 
-Copyright © 2011 weLaika
+Copyright © 2013 weLaika
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
