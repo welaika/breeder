@@ -1,5 +1,5 @@
 function wordless(){
-	local $user=br_user
+	local $user=$(br_user)
 	if [[ ! -x `sudo -u $user bash -l -c "which wordless"` ]]; then
 		warning "You need wordless gem installed in order to bootstrap a new"
 		warning "WordLess project"
