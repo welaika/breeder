@@ -1,13 +1,17 @@
 function add_etc_hosts_entry() {
 	local hostname=$1
-	if [[ ! $(grep ${hostname} /etc/hosts) ]]; then
-		info "Writing '${hostname}' in /etc/hosts"
-		echo "127.0.0.1 $hostname" >> /etc/hosts
+	[[ $2 ]] && hostfile=$2 || hostfile="/etc/hosts"
+
+	if [[ ! $(grep ${hostname} ${hostfile}) ]]; then
+		info "Writing '${hostname}' in ${hostfile}"
+		echo "127.0.0.1 $hostname" >> $hostfile
 	else
 		info "'${hostname}' is already in the /etc/hosts file"
 	fi
 }
 
 function update_etc_hosts() {
-	add_etc_hosts_entry $domain
+	[[ $1 ]] && local hostname=$1 || local hostname=$domain
+	[[ $2 ]] && local hostfile=$2
+	add_etc_hosts_entry $hostname $hostfile
 }

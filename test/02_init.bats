@@ -8,7 +8,7 @@ load source_helper
 	slib usage
 	slib init
 	run manage_arguments
-	[[ "${lines[0]}" == *"Shit we have no arguments here, bro!"* ]]
+	[[ "${lines[0]}" == $( error "Shit we have no arguments here, bro!" ) ]]
 }
 
 @test "init.sh - source_or_create_config() - config is sourced if exists" {
@@ -34,10 +34,10 @@ load source_helper
 	slib init
 
 	run require_root_user
-	[[ "${lines[0]}" == *"This script should be run as root. Probably it will fail"* ]]
+	[[ "${lines[0]}" == $( error "This script should be run as root. Probably it will fail" ) ]]
 }
 
-@test "init.sh - init_config - config initialized if not exists" {
+@test "init.sh - init_config() - config initialized if not exists" {
 	slib logger
 	slib init
 	export userinput_config="$TMP/fakerc"
