@@ -37,7 +37,7 @@ function source_or_create_vhostrc() {
 			read answer
 
 			if [[ ${answer} == "Y" || ${answer} == "y" || ${answer} == '' ]]; then
-				init_rc $config
+				init_config $config
 				if [[ -s $config ]]; then
 					success "rc file correctly created"
 					info "Please configure the options in .vhostrc in your home dir"
