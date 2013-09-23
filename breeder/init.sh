@@ -17,11 +17,7 @@ function manage_arguments(){
 			s) userinput_domain_secondlevel=$OPTARG ;;
 			a) userinput_domain_firstlevel=$OPTARG ;;
 			L) wordless_locale=$OPTARG ;;
-<<<<<<< HEAD
-			i) i_flag=true ;;
-=======
 			i) init_config && exit 0 || exit 1 ;;
->>>>>>> debug
 			d) dbcreate=true ;;
 			w) wordless=true ;;
 			h) usage ;;
