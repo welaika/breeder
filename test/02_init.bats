@@ -23,10 +23,30 @@ load source_helper
 @test "init.sh - set_variables() - variables are parsed" {
 	fakerc
 	slib init
-	export userinput_domain_secondlevel='fakedomain'
+	userinput_domain_secondlevel='fakedomain'
 
 	set_variables
-	[[ $folder == "$TMP/www/fakedomain.local" ]]
+	[[ "$folder" == "$TMP/www/fakedomain.local" ]]
+}
+
+@test "init.sh - set_variables() - \$folder is set to 'EMPTY' if domain_firstlevel=''" {
+	fakerc
+	slib init
+
+	domain_firstlevel=''
+
+	set_variables
+	[[ "$folder" == 'EMPTY' ]]
+}
+
+@test "init.sh - set_variables() - \$folder is set to 'EMPTY' if localweb=''" {
+	fakerc
+	slib init
+
+	docroot=''
+
+	set_variables
+	[[ "$folder" == 'EMPTY' ]]
 }
 
 @test "init.sh - require_root_user()" {
@@ -40,7 +60,7 @@ load source_helper
 @test "init.sh - init_config() - config initialized if not exists" {
 	slib logger
 	slib init
-	export userinput_config="$TMP/fakerc"
+	userinput_config="$TMP/fakerc"
 
 	run init_config
 
@@ -52,7 +72,7 @@ load source_helper
 	slib logger
 	slib init
 
-	export folder="$TMP/www/fakedomain.local"
+	folder="$TMP/www/fakedomain.local"
 
 	create_project_folder
 		INFO=( $(stat -Lc "%a %G %U" $folder) )
@@ -64,6 +84,16 @@ load source_helper
 	[[ $PERM == '770' ]]
 	[[ $GROUP == $web_group ]]
 	[[ $OWNER == $(id -un) ]]
+}
+
+@test "init.sh - create_project_folder() - folder isn't created if site's domain EMPTY" {
+	fakerc
+	slib logger
+	slib init
+
+	folder='EMPTY'
+	run create_project_folder
+	[ "$status" -ne 0 ]
 }
 
 @test "init.sh - br_user() - return my current username" {
