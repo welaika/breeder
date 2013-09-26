@@ -88,6 +88,13 @@ function init_config() {
 
 
 function create_project_folder() {
+	# Explaining the next test
+	#
+	# $folder will be empty if
+	# 	* $localweb or $domain were empty strings
+	# 	* if there is not $userinput_domain_firstlevel and in config
+	# 		file domain_firstlevel is left blank
+	# @see set_variables()
 	if [[ $folder == 'EMPTY' ]]; then
 		error 'There is a problem with your project folder path. Please check "docroot" config in your .vhostrc'
 		exit 1
