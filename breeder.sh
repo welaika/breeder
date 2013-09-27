@@ -80,3 +80,6 @@ bootstrap_wordless
 ##############################################################################
 
 # Coding the project...it's your turn now
+
+# vim: set ts=8 sts=8 sw=8 noet:
+

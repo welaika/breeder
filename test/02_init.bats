@@ -102,3 +102,6 @@ load source_helper
 	run br_user
 	[[ "$output" == $(id -un) ]]
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+

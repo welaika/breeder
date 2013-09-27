@@ -19,3 +19,6 @@ function bootstrap_wordless() {
 	fi
 	if_error "Error occurred"
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+

@@ -4,3 +4,6 @@ function reload_apache() {
 
 	if_error "Could't reload apache executing '${apachecmd}'"
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+
