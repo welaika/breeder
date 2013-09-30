@@ -76,7 +76,7 @@ load source_helper
 
 	run create_project_folder
 	INFO=$( ls -ld $folder )
-	PERM='770'
+	PERM=$( perl -le 'printf("%o", (07777 & (stat($ARGV[0]))[2]))' $folder )
 	GROUP=$(echo $INFO | awk '{ print $4 }')
 	OWNER=$(echo $INFO | awk '{ print $3 }')
 
