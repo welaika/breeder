@@ -39,3 +39,6 @@ load source_helper
 	run create_vhost_file
 	[[ "$output" == $( info "VHost file already exists" ) ]]
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+

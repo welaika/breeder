@@ -15,3 +15,6 @@ load source_helper
 
 	[[ "$(tail -n 1 $TMP/hosts)" == "127.0.0.1 fakedomain2.local" ]]
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+

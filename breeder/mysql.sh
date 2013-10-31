@@ -14,3 +14,6 @@ function create_database() {
 function update_database() {
 	[[ $dbcreate ]] && create_database $domain_secondlevel
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+

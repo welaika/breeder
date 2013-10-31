@@ -74,11 +74,11 @@ load source_helper
 
 	folder="$TMP/www/fakedomain.local"
 
-	create_project_folder
-		INFO=( $(stat -Lc "%a %G %U" $folder) )
-		PERM=${INFO[0]}
-		GROUP=${INFO[1]}
-		OWNER=${INFO[2]}
+	run create_project_folder
+	INFO=$( ls -ld $folder )
+	PERM=$( perl -le 'printf("%o", (07777 & (stat($ARGV[0]))[2]))' $folder )
+	GROUP=$(echo $INFO | awk '{ print $4 }')
+	OWNER=$(echo $INFO | awk '{ print $3 }')
 
 	[[ -d "$TMP/www/fakedomain.local" ]]
 	[[ $PERM == '770' ]]
@@ -102,3 +102,6 @@ load source_helper
 	run br_user
 	[[ "$output" == $(id -un) ]]
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+

@@ -43,3 +43,6 @@ function backup() {
 	cp $1 "$1.bak"
 	warning "File $1 saved as $1.bak"
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+

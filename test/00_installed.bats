@@ -11,3 +11,6 @@ load test_helper
 	run which breeder
 	[ "$status" -eq 0 ]
 }
+
+# vim: set ts=8 sts=8 sw=8 noet:
+
